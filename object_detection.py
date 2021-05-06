@@ -12,32 +12,37 @@ from base64 import b64decode, b64encode
 
 def retina_net(my_img_path, score_threshold, speed, col2):
 
-  from imageai.Detection import ObjectDetection  # //Import ObjectDetection class from the ImageAI library.
+  #Import ObjectDetection class from the ImageAI library.
+  from imageai.Detection import ObjectDetection 
   
-  detector = ObjectDetection()  #//create an instance of the class ObjectDetection
-  #model_path = "/content/resnet50_coco_best_v2.1.0.h5"
+  #create an instance of the class ObjectDetection
+  detector = ObjectDetection()
+  
+  #specify the path from our input image, output image, and model
+  #model_path = "/content/resnet50_coco_best_v2.1.0.h5" #download model locally
+  #download model from google drive
   model_path = "/content/gdrive/MyDrive/Object-detection/resnet50_coco_best_v2.1.0.h5"
   input_path = my_img_path
-  output_path = "/content/newimage.jpg" # //specify the path from our input image, output image, and model.
+  output_path = "/content/newimage.jpg" 
 
-  #load any image and display 
-  #image_file=input_path
   import matplotlib.pyplot as plt
   import matplotlib.image as mpimg
-  #img = mpimg.imread(image_file)
-  #imgplot = plt.imshow(img)
-  #plt.show()
 
-  detector.setModelTypeAsRetinaNet()   #//Using the pre-trained TinyYOLOv3 model, and hence we will use the setModelTypeAsTinyYOLOv3() function to load our model.
-  detector.setModelPath(model_path)  #//function which accepts a string which contains the path to the pre-trained model.
-  detector.loadModel(speed) # //Loads the model from the path specified above using the setModelPath() class method.
+  #load our model
+  detector.setModelTypeAsRetinaNet()
+  #function which accepts a string which contains the path to the pre-trained model.
+  detector.setModelPath(model_path)
+  #Loads the model from the path specified above.
+  detector.loadModel(speed) 
 
-  #function returns a dictionary which contains the names and percentage probabilities of all the objects detected in the image.
+  #function returns a dictionary which contains the class names and percentage probabilities.
   #the dictionary items can be accessed by traversing through each item in the dictionary.
-  detection = detector.detectObjectsFromImage(input_image=input_path, output_image_path=output_path, minimum_percentage_probability=score_threshold) 
+  detection = detector.detectObjectsFromImage(
+    input_image=input_path, output_image_path=output_path, minimum_percentage_probability=score_threshold) 
   for eachItem in detection:
     st.write("Found {} Object - {}".format(eachItem["name"],eachItem["percentage_probability"]))
   
+  #display the result image
   img = mpimg.imread(output_path)
 
   column2 = col2
@@ -50,72 +55,37 @@ def retina_net(my_img_path, score_threshold, speed, col2):
 
 def yolov3_detection(my_img_path, score_threshold, speed, col2):
 
-  from imageai.Detection import ObjectDetection  # //Import ObjectDetection class from the ImageAI library.
+  #Import ObjectDetection class from the ImageAI library.
+  from imageai.Detection import ObjectDetection 
   
-  detector = ObjectDetection()  #//create an instance of the class ObjectDetection
-  #model_path = "/content/pretrained-yolov3.h5"
+  #create an instance of the class ObjectDetection
+  detector = ObjectDetection()
+  
+  #specify the path from our input image, output image, and model
+  #model_path = "/content/pretrained-yolov3.h5" #download model locally
+  #download model from google drive
   model_path = "/content/gdrive/MyDrive/Object-detection/yolo.h5"
   input_path = my_img_path
-  output_path = "/content/newimage.jpg" # //specify the path from our input image, output image, and model.
+  output_path = "/content/newimage.jpg" 
 
-  #load any image and display 
-  #image_file=input_path
   import matplotlib.pyplot as plt
   import matplotlib.image as mpimg
-  #img = mpimg.imread(image_file)
-  #imgplot = plt.imshow(img)
-  #plt.show()
 
-  detector.setModelTypeAsYOLOv3()   #//Using the pre-trained TinyYOLOv3 model, and hence we will use the setModelTypeAsTinyYOLOv3() function to load our model.
-  detector.setModelPath(model_path)  #//function which accepts a string which contains the path to the pre-trained model.
-  detector.loadModel(speed) # //Loads the model from the path specified above using the setModelPath() class method.
+  #load our model
+  detector.setModelTypeAsYOLOv3()
+  #function which accepts a string which contains the path to the pre-trained model.
+  detector.setModelPath(model_path)
+  #Loads the model from the path specified above.
+  detector.loadModel(speed) 
 
-  #function returns a dictionary which contains the names and percentage probabilities of all the objects detected in the image.
+  #function returns a dictionary which contains the class names and percentage probabilities.
   #the dictionary items can be accessed by traversing through each item in the dictionary.
-  detection = detector.detectObjectsFromImage(input_image=input_path, output_image_path=output_path, minimum_percentage_probability=score_threshold) 
-  for eachItem in detection:
-    #if eachItem['name'] == 'bus':
-    st.write("Found {} Object - {} | Boxes: {}".format(eachItem["name"],eachItem["percentage_probability"], eachItem["box_points"]))
-  
-  img = mpimg.imread(output_path)
-
-  column2 = col2
-  st.text("")
-  column2.subheader("Output image")
-  #column2.image("output_path")
-  st.text("")
-  plt.figure(figsize = (15,15))
-  plt.imshow(img)
-  column2.pyplot(use_column_width=True)
-
-def yolo_tiny(my_img_path, score_threshold, speed, col2):
-
-  from imageai.Detection import ObjectDetection  # //Import ObjectDetection class from the ImageAI library.
-  
-  detector = ObjectDetection()  #//create an instance of the class ObjectDetection
-  #model_path = "/content/yolo-tiny.h5" #download model file locally 
-  model_path = "/content/gdrive/MyDrive/Object-detection/yolo-tiny.h5" #download from google drive
-  input_path = my_img_path
-  output_path = "/content/newimage.jpg" # //specify the path from our input image, output image, and model.
-
-  #load any image and display 
-  #image_file=input_path
-  import matplotlib.pyplot as plt
-  import matplotlib.image as mpimg
-  #img = mpimg.imread(image_file)
-  #imgplot = plt.imshow(img)
-  #plt.show()
-
-  detector.setModelTypeAsTinyYOLOv3()   #//Using the pre-trained TinyYOLOv3 model, and hence we will use the setModelTypeAsTinyYOLOv3() function to load our model.
-  detector.setModelPath(model_path)  #//function which accepts a string which contains the path to the pre-trained model.
-  detector.loadModel(speed) # //Loads the model from the path specified above using the setModelPath() class method.
-
-  #function returns a dictionary which contains the names and percentage probabilities of all the objects detected in the image.
-  #the dictionary items can be accessed by traversing through each item in the dictionary.
-  detection = detector.detectObjectsFromImage(input_image=input_path, output_image_path=output_path, minimum_percentage_probability=score_threshold) 
+  detection = detector.detectObjectsFromImage(
+    input_image=input_path, output_image_path=output_path, minimum_percentage_probability=score_threshold) 
   for eachItem in detection:
     st.write("Found {} Object - {}".format(eachItem["name"],eachItem["percentage_probability"]))
   
+  #display the result image
   img = mpimg.imread(output_path)
 
   column2 = col2
@@ -124,7 +94,51 @@ def yolo_tiny(my_img_path, score_threshold, speed, col2):
   st.text("")
   plt.figure(figsize = (15,15))
   plt.imshow(img)
-  column2.pyplot(use_column_width=True)
+  column2.pyplot(use_column_width=True)  
+  
+def yolo_tiny(my_img_path, score_threshold, speed, col2):
+
+  #Import ObjectDetection class from the ImageAI library.
+  from imageai.Detection import ObjectDetection 
+  
+  #create an instance of the class ObjectDetection
+  detector = ObjectDetection()
+  
+  #specify the path from our input image, output image, and model
+  #model_path = "/content/yolo-tiny.h5" #download model file locally 
+  #download model from google drive 
+  model_path = "/content/gdrive/MyDrive/Object-detection/yolo-tiny.h5"
+  input_path = my_img_path
+  output_path = "/content/newimage.jpg" 
+
+  import matplotlib.pyplot as plt
+  import matplotlib.image as mpimg
+
+  #load our model
+  detector.setModelTypeAsTinyYOLOv3()
+  #function which accepts a string which contains the path to the pre-trained model.
+  detector.setModelPath(model_path)
+  #Loads the model from the path specified above.
+  detector.loadModel(speed) 
+
+  #function returns a dictionary which contains the class names and percentage probabilities.
+  #the dictionary items can be accessed by traversing through each item in the dictionary.
+  detection = detector.detectObjectsFromImage(
+    input_image=input_path, output_image_path=output_path, minimum_percentage_probability=score_threshold) 
+  for eachItem in detection:
+    st.write("Found {} Object - {}".format(eachItem["name"],eachItem["percentage_probability"]))
+  
+  #display the result image
+  img = mpimg.imread(output_path)
+
+  column2 = col2
+  st.text("")
+  column2.subheader("Output image")
+  st.text("")
+  plt.figure(figsize = (15,15))
+  plt.imshow(img)
+  column2.pyplot(use_column_width=True)  
+
 
 # Download a single file and make its content available as a string.
 @st.cache(show_spinner=False)
@@ -139,7 +153,6 @@ def to_jpeg(file):
   buffer = io.BytesIO()
   file.save(buffer, format='JPEG', quality=75)
 
-  # You probably want
   desiredObject = buffer.getbuffer()
   return desiredObject
 
@@ -161,7 +174,8 @@ def main():
     #score_threshold = st.sidebar.slider("Confidence_threshold", 0.00,1.00,0.5,0.01)
     #nms_threshold = st.sidebar.slider("NMS_threshold", 0.00, 1.00, 0.4, 0.01)
 
-    choice = st.sidebar.radio("", ("Просмотр информации", "Посмотреть пример", "Загрузить своё изображение", "Посмотреть код"))
+    choice = st.sidebar.radio(
+      "", ("Просмотр информации", "Посмотреть пример", "Загрузить своё изображение", "Посмотреть код"))
 
     if choice == "Просмотр информации":
       st.header("Распознавание объектов :)")
@@ -206,7 +220,7 @@ def main():
     elif choice == "Посмотреть пример":
       model_name = st.sidebar.selectbox('Выберите модель', ('YOLOv3', 'YOLO tiny', 'RetinaNet'))
       score_threshold = st.sidebar.slider("Коэффициент уверенности (%)",  0, 100, 50, 1, '%d')
-      speed = st.sidebar.selectbox('Скорость распознавания', ('normal', 'fast', 'fastest', 'flash')) #'faster' - ?
+      speed = st.sidebar.selectbox('Скорость распознавания', ('normal', 'fast', 'fastest', 'flash')) 
       clicked = st.sidebar.button('Найти объекты')
 
       img_path = '/content/gdrive/MyDrive/Object-detection/input.jpg'
