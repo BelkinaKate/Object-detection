@@ -1,4 +1,3 @@
-%%writefile yolo_app333.py
 import streamlit as st
 import time
 import cv2
