@@ -52,6 +52,7 @@ def MXnet_run(net_, img_path, min_precision, col2):
   scores = scores[0]
   labels = box_ids[0]
   class_names=net.classes
+  flag = 0
   thresh = min_precision / 100
   
   if isinstance(bboxes_, mx.nd.NDArray):
@@ -75,6 +76,12 @@ def MXnet_run(net_, img_path, min_precision, col2):
     score = '{:.3f}'.format(scores.flat[i]*100) if scores is not None else ''
     if class_name or score:
       st.write("Найден объект класса '{:s}' - с уверенностью {:s} %".format(class_name, score))
+      flag = flag + 1
+    
+  if flag == 0:
+    st.write("Ни одного объекта не обнаружено.")
+    st.warning("Возможно, объекты на изображении не принадлежат ни к одному из классов COCO датасета")
+
 
 @st.cache(show_spinner=False)
 def load_model(model_type, speed):
@@ -137,7 +144,7 @@ def run_detection(detector_, my_img_path, score_threshold, col2):
       st.write("Найден объект класса '{}' - с уверенностью {} %".format(eachItem["name"],round(eachItem["percentage_probability"], 3)))
   else:
     st.write("Ни одного объекта не обнаружено.")
-    st.warning("Возможно, объекты на избражении не принадлежат ни к одному из классов COCO датасета")
+    st.warning("Возможно, объекты на изображении не принадлежат ни к одному из классов COCO датасета")
   
   img = mpimg.imread(output_path)
 
@@ -196,7 +203,7 @@ def ssd_detection(model, utils, img_path, min_precision, col2):
         st.write("Найден объект класса '{}' - с уверенностью {} %".format(classes_to_labels[classes[idx] - 1], round(confidences[idx]*100, 3)))
       else:
         st.write("Ни одного объекта не обнаружено.")
-        st.warning("Возможно, объекты на избражении не принадлежат ни к одному из классов COCO датасета")
+        st.warning("Возможно, объекты на изображении не принадлежат ни к одному из классов COCO датасета")
 
     column2 = col2
     st.text("")
