@@ -1,21 +1,12 @@
 import streamlit as st
 import time
-import cv2
-import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
-import os, urllib
-import base64
-import io
-from io import BytesIO
-#from google.colab.patches import cv2_imshow
-from base64 import b64decode, b64encode
+import urllib
 import gluoncv
 from gluoncv import model_zoo, data, utils
 import mxnet as mx
 import matplotlib.image as mpimg
-
-import torch
 import matplotlib.patches as patches
 
 def load_rcnn():
@@ -28,7 +19,7 @@ def load_ssd():
   net_ssd = model_zoo.get_model('ssd_512_vgg16_atrous_coco', pretrained=True)
   return net_ssd
 
-def MXnet_run(net_, img_path, min_precision, col2):
+def mxnet_run(net_, img_path, min_precision, col2):
   net = net_
 
   #get and transform image
@@ -285,11 +276,11 @@ def image_detection(model_name, speed, img_path, score_threshold, col2, net_):
     #score_threshold_ = score_threshold / 100
     #ssd_detection(model, utils, img_path, score_threshold_, col2)
     net = net_
-    MXnet_run(net, img_path, score_threshold, col2) 
+    mxnet_run(net, img_path, score_threshold, col2) 
   
   elif model_type == 'faster_rcnn':
     net = net_
-    MXnet_run(net, img_path, score_threshold, col2)
+    mxnet_run(net, img_path, score_threshold, col2)
 
   else:
     #load the model settings and file
@@ -320,7 +311,7 @@ def main():
       st.empty()
       st.header("Обнаружение объектов на Вашем изображении")
       st.markdown("Загрузите своё изображение, настройте модель для распознавания и минимальный процент уверенности предсказаний.")
-      model_name = st.sidebar.selectbox('Выберите модель', ('YOLOv3', 'SSD', 'Faster RCNN', 'RetinaNet', 'YOLO tiny'))
+      model_name = st.sidebar.selectbox('Выберите модель', ('SSD', 'YOLOv3', 'Faster RCNN', 'RetinaNet'))
       image_file = st.file_uploader("Загрузите изображение с помощью формы", type=['jpg','jpeg'])
       score_threshold = st.sidebar.slider("Коэффициент уверенности (%)", 0, 100, 50, 1, '%d')
       #speed = st.sidebar.selectbox('Скорость распознавания', ('normal', 'fast', 'faster', 'fastest', 'flash'))
@@ -357,7 +348,7 @@ def main():
       st.empty()
       st.header("Пример распознавания объектов на изображении")
       st.markdown("Попробуйте распознавание с помощью разных моделей глубокого обучения.")
-      model_name = st.sidebar.selectbox('Выберите модель', ('YOLOv3', 'SSD', 'Faster RCNN', 'RetinaNet', 'YOLO tiny'))
+      model_name = st.sidebar.selectbox('Выберите модель', ('SSD', 'YOLOv3', 'Faster RCNN', 'RetinaNet'))
       score_threshold = st.sidebar.slider("Коэффициент уверенности (%)",  0, 100, 50, 1, '%d')
       #speed = st.sidebar.selectbox('Скорость распознавания', ('normal', 'fast', 'faster','fastest', 'flash'))
       speed = set_speed(model_name)
